@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagina di prova</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #222; background: #fff; }
+  .skip { position: absolute; top: 4px; left: 4px; padding: 4px 8px; background: #000; color: #fff; }
+  .top { position: sticky; top: 0; display: flex; justify-content: space-between; align-items: center; height: 64px; padding: 0 40px; background: #eee; }
+  .top nav { display: flex; gap: 16px; }
+  .hero { display: grid; grid-template-columns: 7fr 5fr; gap: 24px; padding: 64px 40px; }
+  .hero img { display: block; width: 100%; height: 320px; background: #ccc; }
+  .actions { display: flex; gap: 12px; }
+  .btn { display: inline-block; padding: 10px 18px; background: #333; color: #fff; }
+  .features { padding: 48px 40px; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .card { padding: 24px; min-height: 200px; background: #f3f3f3; }
+  .logos { padding: 48px 40px; }
+  .logos ul { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 0; list-style: none; }
+  .logos li { padding: 16px; background: #ddd; text-align: center; }
+  .contact { display: grid; grid-template-columns: 8fr 4fr; gap: 24px; padding: 48px 40px; }
+  .contact form { display: grid; gap: 12px; }
+  .contact aside { padding: 24px; background: #f3f3f3; }
+  footer { padding: 32px 40px; background: #222; color: #fff; }
+  .offscreen { position: absolute; left: -9999px; width: 300px; height: 100px; }
+  .blob { position: absolute; top: 200px; right: 0; width: 300px; height: 300px; background: rgba(0, 0, 200, 0.05); }
+  .cookie { position: fixed; right: 16px; bottom: 16px; width: 320px; padding: 16px; background: #000; color: #fff; }
+  .lazy { opacity: 0; transition: opacity 0.1s; }
+  .lazy.seen { opacity: 1; }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Salta al contenuto</a>
+<div id="root"><div class="app"><div>
+  <header class="top">
+    <a class="logo" href="/">Acme</a>
+    <nav aria-label="Menu principale"><a href="/a">Prodotto</a><a href="/b">Prezzi</a><a href="/c">Contatti</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero">
+      <div>
+        <h1>Costruisci più in fretta</h1>
+        <p>Una frase che spiega il prodotto in poche parole, senza giri inutili.</p>
+        <div class="actions"><a class="btn" href="/start">Inizia</a><a class="btn" href="/demo">Guarda la demo</a></div>
+      </div>
+      <img alt="Foto del prodotto" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+    </section>
+    <section class="features">
+      <h2>Caratteristiche</h2>
+      <div class="cards">
+        <article class="card"><h3>Veloce</h3><p>Prima card di esempio.</p></article>
+        <article class="card"><h3>Semplice</h3><p>Seconda card di esempio.</p></article>
+        <article class="card"><h3>Sicuro</h3><p>Terza card di esempio.</p></article>
+      </div>
+    </section>
+    <section class="logos lazy" id="clienti">
+      <h2>Clienti</h2>
+      <ul>
+        <li>Logo uno</li><li>Logo due</li><li>Logo tre</li><li>Logo quattro</li>
+        <li>Logo cinque</li><li>Logo sei</li><li>Logo sette</li><li>Logo otto</li>
+      </ul>
+    </section>
+    <div style="display: contents">
+      <section class="contact">
+        <form aria-label="Modulo di contatto">
+          <label>Nome <input name="nome" placeholder="Il tuo nome"></label>
+          <label>Email <input name="email" placeholder="nome@esempio.it"></label>
+          <button type="button">Invia</button>
+        </form>
+        <aside><h3>Parla con noi</h3><p>Rispondiamo entro un giorno.</p></aside>
+      </section>
+    </div>
+  </main>
+  <footer><p>Licenza e contatti</p></footer>
+</div></div></div>
+<div hidden>Contenuto nascosto</div>
+<div class="offscreen">Fuori schermo</div>
+<div class="blob"></div>
+<div class="cookie" role="dialog" aria-label="Banner dei cookie">Usiamo i cookie</div>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) if (entry.isIntersecting) entry.target.classList.add('seen');
+  });
+  document.querySelectorAll('.lazy').forEach((element) => observer.observe(element));
+</script>
+</body>
+</html>
