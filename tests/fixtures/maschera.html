@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maschera di prova</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, sans-serif; color: #222; background: #fff; }
+  .top { display: flex; justify-content: space-between; align-items: center; height: 56px; padding: 0 32px; background: #1d3557; color: #fff; }
+  .top a { color: #fff; }
+  .crumbs { padding: 10px 32px; }
+  main { padding: 0 32px 32px; }
+  h1 { margin: 8px 0 16px; font-size: 22px; }
+  .tabs { display: flex; gap: 4px; border-bottom: 2px solid #ccc; margin-bottom: 16px; }
+  .tabs button { padding: 8px 16px; border: 1px solid #ccc; border-bottom: 0; background: #f4f4f4; }
+  .filters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 24px; padding: 16px; border: 1px solid #ccc; margin-bottom: 16px; }
+  .row { display: flex; flex-direction: column; gap: 4px; }
+  .row.inline { flex-direction: row; align-items: center; gap: 8px; }
+  .lookup { display: flex; gap: 4px; }
+  .lookup input { flex: 1; }
+  input, select, textarea { padding: 6px 8px; border: 1px solid #999; font: inherit; }
+  textarea { grid-column: span 3; min-height: 60px; }
+  .wide { grid-column: span 3; }
+  .btn-group { display: flex; gap: 8px; margin: 12px 0 16px; }
+  .btn { padding: 8px 16px; border: 1px solid #1d3557; background: #1d3557; color: #fff; }
+  .btn.secondary { background: #fff; color: #1d3557; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 8px; border: 1px solid #ccc; text-align: left; }
+  .pager { display: flex; gap: 6px; justify-content: flex-end; margin-top: 12px; }
+  .pager a { padding: 4px 10px; border: 1px solid #ccc; }
+</style>
+</head>
+<body>
+<header class="top">
+  <strong>SISaR · Acquisti</strong>
+  <a href="/logout">Esci</a>
+</header>
+<nav class="crumbs" aria-label="Percorso"><a href="/">Home</a> › <a href="/acq">Acquisti</a> › <span>Ordini</span></nav>
+<main>
+  <h1>Ricerca ordini</h1>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true">Filtri</button>
+    <button role="tab">Risultati</button>
+    <button role="tab">Allegati</button>
+  </div>
+  <form class="filters" aria-label="Filtri di ricerca">
+    <div class="row">
+      <label for="fornitore">Fornitore</label>
+      <div class="lookup"><input id="fornitore" required placeholder="Codice fornitore"><button type="button" title="Cerca fornitore">🔍</button></div>
+    </div>
+    <div class="row"><label for="dal">Data dal</label><input id="dal" type="date"></div>
+    <div class="row"><label for="al">Data al</label><input id="al" type="date"></div>
+    <div class="row"><label for="importo">Importo minimo</label><input id="importo" type="number"></div>
+    <div class="row"><label for="stato">Stato</label><select id="stato"><option>Tutti</option><option>Aperto</option></select></div>
+    <div class="row"><label for="email">Email referente</label><input id="email" type="email"></div>
+    <div class="row inline"><input id="urgente" type="checkbox"><label for="urgente">Solo urgenti</label></div>
+    <div class="row inline"><label><input type="radio" name="tipo" checked> Beni</label><label><input type="radio" name="tipo"> Servizi</label></div>
+    <div class="row inline"><input id="nso" type="checkbox" role="switch"><label for="nso">Inviati a NSO</label></div>
+    <textarea aria-label="Note di ricerca" placeholder="Note"></textarea>
+  </form>
+  <div class="btn-group" role="group" aria-label="Azioni">
+    <button class="btn" type="button">Cerca</button>
+    <button class="btn secondary" type="button">Pulisci</button>
+    <button class="btn secondary" type="button">Nuovo ordine</button>
+    <button class="btn secondary" type="button" disabled>Elimina</button>
+  </div>
+  <table aria-label="Risultati">
+    <thead><tr><th>Numero</th><th>Data</th><th>Fornitore</th><th>Importo</th><th>Stato</th></tr></thead>
+    <tbody>
+      <tr><td>2026/001</td><td>03/11/2026</td><td>Fornitore Uno</td><td>1.200,00</td><td>Aperto</td></tr>
+      <tr><td>2026/002</td><td>04/11/2026</td><td>Fornitore Due</td><td>530,00</td><td>Chiuso</td></tr>
+    </tbody>
+  </table>
+  <nav class="pager" aria-label="Pagine"><a href="#1">‹</a><a href="#1">1</a><a href="#2">2</a><a href="#3">›</a></nav>
+</main>
+</body>
+</html>
