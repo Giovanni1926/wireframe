@@ -1,7 +1,6 @@
 ---
 name: wireframe
 description: Apre un mockup disegnato a mano dell'intera pagina, da riorganizzare trascinando i blocchi, mentre si pianifica una modifica al frontend. Parte dall'HTML reale, con qualsiasi framework, e riporta nel piano il layout approvato.
-disable-model-invocation: true
 argument-hint: "[URL, pagina o file] [pannello]"
 allowed-tools: Read, Bash(node ${CLAUDE_SKILL_DIR}/scripts/serve.mjs *), Bash(curl -s http://127.0.0.1:*), mcp__Claude_Browser__preview_start, mcp__Claude_Browser__navigate, mcp__Claude_Browser__resize_window, mcp__Claude_Browser__javascript_tool, mcp__Claude_Browser__tabs_context
 ---
