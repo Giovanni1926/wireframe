@@ -6,60 +6,9 @@
 <title>Mockup</title>
 <link rel="stylesheet" href="/vendor/gridstack.min.css">
 <style>
-  :root {
-    color-scheme: light dark;
-    --hand: "Comic Sans MS", "Comic Sans", "Comic Neue", "Chalkboard SE", "Marker Felt", cursive;
-    --wobbly: 14px 5px 12px 6px / 6px 12px 5px 14px;
-    --page: #efece3;
-    --sheet: #fffefb;
-    --guide: rgba(40, 38, 30, 0.05);
-    --ink: #262522;
-    --soft: #75726a;
-    --block: #ffffff;
-    --wash: #e4e1d8;
-    --night: #3b3a36;
-    --night-wash: #56554f;
-    --night-soft: #c9c7bd;
-    --night-text: #fbfaf5;
-    --link: #1f5fbf;
-    --night-link: #a9cdf7;
-    --shadow: rgba(38, 37, 34, 0.3);
-    --new-bg: #dcecfb;
-    --new-shade: #c1dcf6;
-    --new-ink: #0c447c;
-    --changed-bg: #fbeccd;
-    --changed-shade: #f5dca9;
-    --changed-ink: #633806;
-    --touched: #6a35c9;
-    --danger: #a32d2d;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --page: #1d2024;
-      --sheet: #272b30;
-      --guide: rgba(255, 255, 255, 0.05);
-      --ink: #eeece5;
-      --soft: #aeaca3;
-      --block: #31353b;
-      --wash: #454a51;
-      --night: #14161a;
-      --night-wash: #2c3036;
-      --night-soft: #aeaca3;
-      --night-text: #eeece5;
-      --link: #8cbcf5;
-      --night-link: #8cbcf5;
-      --shadow: rgba(0, 0, 0, 0.5);
-      --new-bg: #123a63;
-      --new-shade: #1b4f83;
-      --new-ink: #cfe5fb;
-      --changed-bg: #56360c;
-      --changed-shade: #734a12;
-      --changed-ink: #fbe6c2;
-      --touched: #c3a6ff;
-      --danger: #f09595;
-    }
-  }
+  /* Colori, font e forma stanno nei temi (themes.css): qui solo la struttura. */
+  /* --zoom è la scala della vista: la imposta l'editor, insieme a --sheet-width quando non è 100%. */
+  :root { --columns: 12; --zoom: 1; }
 
   * { box-sizing: border-box; }
 
@@ -67,20 +16,20 @@
     margin: 0;
     background: var(--page);
     color: var(--ink);
-    font: 14px/1.4 var(--hand);
+    font: 14px/1.4 var(--font);
   }
 
   .bar {
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 40;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 20px;
+    gap: 8px 18px;
     padding: 10px 16px;
     background: var(--page);
-    border-bottom: 3px solid var(--ink);
+    border-bottom: var(--bar-line) solid var(--edge);
   }
 
   .bar h1 { margin: 0; font-size: 18px; font-weight: 700; }
@@ -92,37 +41,81 @@
   .legend .new { background: var(--new-bg); border-color: var(--new-ink); }
   .legend .changed { background: var(--changed-bg); border-color: var(--changed-ink); }
   .legend .touched { border: 3px solid var(--touched); }
+  .legend .selected { border: 3px dashed var(--selected); }
+  .legend .note { background: var(--note-bg); border-color: var(--note-edge); rotate: 4deg; border-radius: 2px; }
 
-  .actions { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-left: auto; }
+  .theme { display: inline-flex; align-items: center; gap: 6px; color: var(--soft); font-size: 13px; }
+  .zoom { display: inline-flex; align-items: center; gap: 4px; }
+  .zoom button { padding: 3px 9px; }
+  #zoom-level { min-width: 58px; }
 
-  button {
-    padding: 3px 14px;
+  button, .field-like {
+    padding: 3px 12px;
     color: var(--ink);
     font: inherit;
+    font-size: 13px;
     font-weight: 700;
     background: var(--block);
-    border: 2px solid var(--ink);
+    border: var(--line) solid var(--edge);
     border-radius: var(--wobbly);
-    box-shadow: 2px 3px 0 var(--ink);
+    box-shadow: var(--btn-shadow);
     cursor: pointer;
   }
-  button:hover:not(:disabled) { translate: -1px -1px; box-shadow: 3px 4px 0 var(--ink); }
-  button:active:not(:disabled) { translate: 2px 3px; box-shadow: none; }
-  button:focus-visible { outline: 3px solid var(--touched); outline-offset: 2px; }
-  button:disabled { color: var(--soft); border-color: var(--soft); box-shadow: none; cursor: default; }
+  button:hover:not(:disabled) { translate: var(--lift); box-shadow: var(--btn-shadow-hover); }
+  button:active:not(:disabled) { translate: var(--press); box-shadow: none; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--touched); outline-offset: 2px; }
+  button:disabled { color: var(--soft); border-color: var(--soft); box-shadow: none; cursor: default; opacity: 0.7; }
+  button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+  button.danger { color: var(--danger); border-color: var(--danger); box-shadow: var(--btn-shadow-danger); }
+
+  input, select, textarea {
+    color: var(--ink);
+    font: inherit;
+    font-size: 13px;
+    background: var(--sheet);
+    border: var(--line) solid var(--edge);
+    border-radius: var(--field-radius);
+    padding: 3px 8px;
+  }
 
   #status { min-width: 150px; color: var(--soft); font-size: 13px; text-align: right; }
+
+  .quick { position: relative; }
+  .quick input { width: 200px; }
+  .quick ul {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 60;
+    min-width: 260px;
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+    background: var(--sheet);
+    border: var(--line) solid var(--edge);
+    border-radius: var(--wobbly);
+    box-shadow: var(--menu-shadow);
+  }
+  .quick li { display: flex; justify-content: space-between; gap: 12px; padding: 3px 8px; border-radius: 6px; cursor: pointer; }
+  .quick li small { color: var(--soft); }
+  .quick li[aria-selected="true"], .quick li:hover { background: var(--wash); }
 
   .notice { margin: 0; padding: 8px 16px; color: var(--soft); font-size: 13px; }
   .notice.done { color: var(--ink); background: var(--new-bg); }
   .notice.error { color: var(--danger); }
 
-  main { max-width: 1440px; margin: 0 auto; padding: 0 16px 48px; }
+  /* La libreria agganciata a sinistra ha il suo spazio: non copre il foglio finché non la sposti. */
+  main { max-width: calc(1440px + var(--dock-left, 0px)); margin: 0 auto; padding: 0 16px 48px calc(16px + var(--dock-left, 0px)); }
+  body.docked { --dock-left: 332px; }
+  /* Con lo zoom il foglio ha una larghezza calcolata, che può superare la finestra: si scorre in orizzontale.
+     Lo spazio della libreria agganciata resta fisso, non scala. */
+  body.zoomed main { width: calc(var(--sheet-width) + 32px + var(--dock-left, 0px)); max-width: none; }
 
   .sheet {
     --pen: var(--ink);
     --fill: var(--sheet);
-    --weight: 3;
+    --weight: var(--sheet-weight);
     position: relative;
     padding: 50px 10px 10px;
   }
@@ -143,7 +136,7 @@
   #wf {
     min-height: 300px;
     background-image: linear-gradient(to right, var(--guide) 2px, transparent 2px);
-    background-size: calc(100% / 12) 100%;
+    background-size: calc(100% / var(--columns)) 100%;
   }
 
   .grid-stack-item-content {
@@ -153,10 +146,10 @@
     --fill: var(--block);
     --shade: var(--wash);
     --hyperlink: var(--link);
-    --weight: 2.8;
-    overflow: hidden;
+    --weight: var(--block-weight);
     cursor: grab;
   }
+
   .ui-draggable-dragging > .grid-stack-item-content { cursor: grabbing; }
 
   .sk {
@@ -167,13 +160,18 @@
     overflow: visible;
     pointer-events: none;
   }
-  .sk path { fill: none; stroke: var(--pen); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .sk path { fill: none; stroke: var(--pen); stroke-width: var(--stroke); stroke-linecap: round; stroke-linejoin: round; }
   .sk .outline { fill: var(--fill); stroke-width: var(--weight); }
+  .sk .ghost { fill: transparent; stroke: var(--faint); stroke-width: 1.4; stroke-dasharray: 5 5; }
   .sk .field { fill: var(--fill); }
-  .sk .shade { fill: var(--shade); stroke-width: 1.8; }
+  .sk .readonly { fill: var(--readonly-bg); }
+  .sk .shade { fill: var(--shade); stroke-width: var(--stroke-thin); }
+  .sk .button { fill: var(--shade); stroke-width: var(--stroke-thin); }
   .sk .mark { stroke: var(--type); }
   .sk .solid { fill: var(--type); stroke: var(--type); }
   .sk .scribble { stroke: var(--faint); stroke-width: 1.8; }
+  /* Barre di testo dei temi puliti: segnaposto, non scrittura. */
+  .sk .bar { stroke: var(--faint); stroke-width: 5; opacity: 0.3; }
 
   .sk-text { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
   .sk-text span {
@@ -183,27 +181,79 @@
     overflow: hidden;
     color: var(--type);
     line-height: 1.2;
-    overflow-wrap: anywhere;
+    /* Le parole non si spezzano a metà: se una non ci sta, il disegno sceglie un corpo più piccolo. */
+    overflow-wrap: normal;
+    word-break: normal;
   }
   .sk-text .heading, .sk-text .strong { font-weight: 700; }
   .sk-text .center { text-align: center; }
+  .sk-text .right { text-align: right; }
   .sk-text .faint { color: var(--faint); }
   .sk-text .link { color: var(--hyperlink); text-decoration: underline; }
-  .sk-text .caption { color: var(--faint); font-weight: 700; }
+  .sk-text .caption { color: var(--type); font-weight: 700; letter-spacing: 0.01em; }
   .sk-text .sticker {
     top: 5px;
     right: 8px;
     padding: 0 7px;
     color: var(--fill);
+    font-size: calc(11px * var(--zoom));
+    font-weight: 700;
+    line-height: calc(16px * var(--zoom));
+    background: var(--pen);
+    border-radius: var(--wobbly);
+    rotate: var(--tilt);
+  }
+  .has-note > .grid-stack-item-content > .sk-text .sticker { right: 30px; }
+
+  /* Cartellino del tipo e post-it della nota: fuori dal disegno, che si ridipinge a ogni misura.
+     Il cartellino è discreto: compare al passaggio, sulla selezione e, con "Tipi", sui blocchi alti. */
+  .wf-type {
+    position: absolute;
+    bottom: 3px;
+    left: 6px;
+    z-index: 3;
+    display: none;
+    padding: 0 6px;
+    color: var(--soft);
+    font-family: var(--clean-font);
+    font-size: 10px;
+    line-height: 14px;
+    white-space: nowrap;
+    background: var(--sheet);
+    border: 1px solid var(--soft);
+    border-radius: var(--wobbly);
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .section > .grid-stack-item-content > .wf-type { right: 8px; left: auto; }
+  body.show-types .tall > .grid-stack-item-content > .wf-type,
+  .grid-stack-item:hover:not(:has(.grid-stack-item:hover)) > .grid-stack-item-content > .wf-type,
+  .grid-stack-item.selected > .grid-stack-item-content > .wf-type { display: block; }
+
+  .wf-note {
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    z-index: 4;
+    min-width: 20px;
+    height: 19px;
+    padding: 0 4px;
+    color: var(--note-ink);
     font-size: 11px;
     font-weight: 700;
     line-height: 16px;
-    background: var(--pen);
-    border-radius: var(--wobbly);
-    rotate: 2deg;
+    text-align: center;
+    background: var(--note-bg);
+    border: 1.5px solid var(--note-edge);
+    border-radius: 2px 2px 7px 2px;
+    box-shadow: 1px 2px 0 var(--shadow);
+    rotate: 5deg;
+    pointer-events: none;
   }
+  .wf-note[hidden], body.hide-notes .wf-note { display: none; }
 
-  .section > .grid-stack-item-content > .grid-stack { margin-top: 18px; }
+  /* Spazio per il titolo della sezione, che il disegno scala con lo zoom. */
+  .section > .grid-stack-item-content > .grid-stack { margin-top: calc(18px * var(--zoom)); }
 
   [data-tone="dark"] > .grid-stack-item-content {
     --fill: var(--night);
@@ -213,7 +263,8 @@
     --hyperlink: var(--night-link);
   }
   [data-kind="section"]:not([data-tone="dark"]) > .grid-stack-item-content { --fill: transparent; }
-  :is([data-kind="button"], [data-kind="image"], [data-kind="video"]) > .grid-stack-item-content { --fill: var(--shade); }
+  :is([data-kind="button"], [data-kind="iconButton"], [data-kind="menu"], [data-kind="image"], [data-kind="video"]) > .grid-stack-item-content { --fill: var(--shade); }
+  [data-disabled="true"] > .grid-stack-item-content > :is(.sk, .sk-text) { opacity: 0.45; }
 
   .grid-stack-item[data-status="new"] > .grid-stack-item-content {
     --pen: var(--new-ink);
@@ -232,44 +283,168 @@
     --hyperlink: var(--changed-ink);
   }
 
-  /* Ogni blocco è spesso, perché qui si può spostare tutto. Quello in mano lo è di più. */
-  .touched > .grid-stack-item-content { --pen: var(--touched); --weight: 4; }
-  .grid-stack-item:hover:not(:has(.grid-stack-item:hover)) > .grid-stack-item-content { --weight: 4.2; }
+  /* Ogni blocco ha un bordo pieno, perché qui si può spostare tutto. Quello in mano lo ha più spesso. */
+  .touched > .grid-stack-item-content { --pen: var(--touched); --weight: var(--touched-weight); }
+  .grid-stack-item:hover:not(:has(.grid-stack-item:hover)) > .grid-stack-item-content { --weight: var(--hover-weight); }
+  .grid-stack-item.selected > .grid-stack-item-content { outline: 3px dashed var(--selected); outline-offset: -1px; border-radius: var(--select-radius); }
 
   /* Rotazione e ombra solo sul blocco in mano: su una sezione ferma intrappolerebbero
      i blocchi trascinati fuori, che durante il trascinamento sono in position: fixed. */
   .ui-draggable-dragging > .grid-stack-item-content,
   .ui-resizable-resizing > .grid-stack-item-content {
-    --weight: 6;
+    --weight: var(--drag-weight);
     opacity: 1;
     box-shadow: none;
-    filter: drop-shadow(6px 7px 0 var(--shadow));
+    filter: var(--drop-shadow);
   }
-  .ui-draggable-dragging > .grid-stack-item-content { rotate: -1.2deg; }
+  .ui-draggable-dragging > .grid-stack-item-content { rotate: var(--drag-tilt); }
+
+  /* Durante l'esportazione PNG spariscono i segni dell'editor; restano post-it e cartellini di stato. */
+  body.exporting .ui-resizable-handle,
+  body.exporting .grid-stack-placeholder { display: none !important; }
+  body.exporting .grid-stack-item:hover > .grid-stack-item-content { --weight: var(--block-weight); }
+  body.exporting .grid-stack-item.touched:hover > .grid-stack-item-content { --weight: var(--touched-weight); }
 
   .grid-stack-placeholder > .placeholder-content {
     background: var(--guide);
     border: 3px dashed var(--soft);
     border-radius: var(--wobbly);
   }
+
+  /* Pannelli flottanti: si spostano dall'intestazione e si chiudono a sola intestazione. */
+  .panel {
+    position: fixed;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 90px);
+    background: var(--sheet);
+    border: var(--panel-line) solid var(--edge);
+    border-radius: var(--wobbly);
+    box-shadow: var(--panel-shadow);
+  }
+  .panel[hidden] { display: none; }
+  .panel > header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px 5px 12px;
+    font-weight: 700;
+    border-bottom: var(--line) solid var(--edge);
+    cursor: move;
+    user-select: none;
+    touch-action: none;
+  }
+  .panel > header span { flex: 1; }
+  .panel > header button { padding: 0 8px; font-size: 12px; box-shadow: var(--btn-shadow-small); }
+  .panel .body { padding: 8px 10px 10px; overflow: auto; }
+  .panel.collapsed .body { display: none; }
+  .panel.collapsed > header { border-bottom: 0; }
+  body.closed .panel { opacity: 0.5; pointer-events: none; }
+
+  #library { top: 76px; left: 12px; width: 316px; }
+  #library .search { width: 100%; margin-bottom: 6px; }
+  #library details { margin: 4px 0; }
+  #library summary { padding: 2px 4px; font-weight: 700; cursor: pointer; border-radius: 6px; }
+  #library summary:hover { background: var(--wash); }
+  /* Una tessera per riga: l'anteprima a tutta larghezza fa riconoscere il componente a colpo d'occhio. */
+  .tiles { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 6px 0 2px; }
+  /* Le tessere hanno sempre il font pulito: devono farsi leggere, qualunque sia il tema. */
+  .tile {
+    --pen: var(--ink);
+    --type: var(--ink);
+    --faint: var(--soft);
+    --fill: var(--block);
+    --shade: var(--wash);
+    --hyperlink: var(--link);
+    --weight: 1.5;
+    --stroke: 1.5;
+    --stroke-thin: 1.5;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    padding: 8px 8px 6px;
+    color: var(--ink);
+    font-family: var(--clean-font);
+    font-size: 13px;
+    line-height: 1.2;
+    text-align: left;
+    background: var(--sheet);
+    border: 1px solid var(--edge);
+    border-radius: var(--wobbly);
+    cursor: grab;
+    user-select: none;
+  }
+  .tile:hover { border-color: var(--ink); background: var(--wash); }
+  .tile .tile-sketch { position: relative; width: 100%; height: var(--tile-height, 56px); }
+  .tile .tile-name { font-weight: 600; }
+  .tile .tile-name small { margin-left: 6px; color: var(--soft); font-weight: 400; font-size: 11px; }
+  .tile[hidden] { display: none; }
+  /* La tessera trascinata è un clone sopra la pagina. */
+  body > .tile { z-index: 80; width: 280px; opacity: 0.9; box-shadow: var(--menu-shadow); }
+
+  #inspector { top: 76px; right: 12px; width: 290px; }
+  #inspector .empty { margin: 0; color: var(--soft); }
+  #inspector label { display: block; margin: 8px 0 2px; font-size: 12px; font-weight: 700; color: var(--soft); }
+  #inspector label.check { display: flex; align-items: center; gap: 6px; margin: 6px 0 0; color: var(--ink); font-weight: 400; font-size: 13px; }
+  #inspector :is(input:not([type]), input[type=text], input[type=number], select, textarea) { width: 100%; }
+  #inspector textarea { min-height: 84px; resize: vertical; }
+  #inspector .meta { margin: 8px 0 0; color: var(--soft); font-size: 11px; overflow-wrap: anywhere; }
+  #inspector .hint { margin: 6px 0 0; padding: 4px 8px; color: var(--note-ink); font-size: 12px; background: var(--note-bg); border-radius: 4px; }
+  #inspector .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  #inspector textarea#i-note { background: color-mix(in srgb, var(--note-bg) 35%, var(--sheet)); }
+
+  .inline-edit {
+    position: fixed;
+    z-index: 70;
+    padding: 2px 6px;
+    font-weight: 700;
+    border: 2.5px solid var(--selected);
+  }
 </style>
+<link rel="stylesheet" href="/themes.css">
 </head>
-<body>
+<body class="show-types docked" data-theme="pulito">
 <header class="bar">
   <h1>Mockup <span id="page"></span></h1>
   <div class="legend" aria-label="Legenda">
     <span><i></i>Esistente</span>
-    <span><i class="new"></i>Nuovo nel piano</span>
+    <span><i class="new"></i>Nuovo</span>
     <span><i class="changed"></i>Modificato nel piano</span>
     <span><i class="touched"></i>Spostato da te</span>
+    <span><i class="selected"></i>Selezionato</span>
+    <span><i class="note"></i>Con nota</span>
   </div>
   <div class="actions">
+    <div class="quick">
+      <input id="quick" type="text" placeholder="Aggiungi veloce… (Ctrl+K)" autocomplete="off" aria-label="Aggiungi un componente" aria-controls="quick-list" aria-expanded="false" role="combobox">
+      <ul id="quick-list" role="listbox" hidden></ul>
+    </div>
+    <label class="theme">Tema
+      <select id="theme" aria-label="Tema del mockup">
+        <option value="pulito">Wireframe pulito</option>
+        <option value="pulito-scuro">Pulito scuro</option>
+        <option value="schizzo">Schizzo</option>
+        <option value="blueprint">Blueprint</option>
+      </select>
+    </label>
+    <button id="toggle-types" type="button" aria-pressed="true" title="Mostra il tipo di ogni blocco">Tipi</button>
+    <button id="toggle-notes" type="button" aria-pressed="true" title="Mostra i post-it delle note">Note</button>
+    <div class="zoom" role="group" aria-label="Zoom">
+      <button id="zoom-out" type="button" title="Riduci (Ctrl+-)" aria-label="Riduci">−</button>
+      <button id="zoom-level" type="button" title="Torna al 100% (Ctrl+0)">100%</button>
+      <button id="zoom-in" type="button" title="Ingrandisci (Ctrl++)" aria-label="Ingrandisci">+</button>
+      <button id="zoom-fit" type="button" title="Adatta il foglio alla larghezza della finestra">Adatta</button>
+    </div>
+    <button id="export" type="button" title="Scarica il mockup come immagine PNG">Esporta PNG</button>
     <span id="status" role="status" aria-live="polite">Caricamento</span>
-    <button id="undo" type="button" disabled>Annulla</button>
+    <button id="undo" type="button" disabled title="Ctrl+Z">Annulla</button>
+    <button id="redo" type="button" disabled title="Ctrl+Shift+Z">Ripeti</button>
     <button id="reset" type="button" disabled>Ripristina</button>
   </div>
 </header>
-<p class="notice" id="notice">Trascina i blocchi e ridimensionali dai bordi. Ogni modifica si salva da sola: quando hai finito, torna in chat e premi "Ho finito".</p>
+<p class="notice" id="notice">Trascina e ridimensiona i blocchi. Trascina un componente dalla libreria per aggiungerlo, clicca un blocco per modificarlo, eliminarlo o lasciare una nota a chi svilupperà. Ogni modifica si salva da sola: quando hai finito, torna in chat e premi "Ho finito".</p>
 <main>
   <div class="sheet" id="sheet">
     <svg class="sk" id="sheet-sketch" aria-hidden="true"></svg>
@@ -278,781 +453,49 @@
   </div>
 </main>
 
+<section class="panel" id="library" aria-label="Libreria dei componenti">
+  <header data-drag><span>Libreria</span><button type="button" data-collapse aria-expanded="true" title="Comprimi">–</button></header>
+  <div class="body">
+    <input class="search" id="library-search" type="search" placeholder="Filtra componenti" aria-label="Filtra componenti">
+    <div id="library-list"></div>
+  </div>
+</section>
+
+<section class="panel" id="inspector" aria-label="Proprietà dell'elemento">
+  <header data-drag><span id="i-title">Proprietà</span><button type="button" data-collapse aria-expanded="true" title="Comprimi">–</button></header>
+  <div class="body">
+    <p class="empty" id="i-empty">Clicca un blocco per vederne le proprietà. Doppio clic per cambiarne il testo.</p>
+    <form id="i-form" hidden autocomplete="off">
+      <label for="i-type">Tipo</label>
+      <select id="i-type"></select>
+      <label for="i-label">Testo</label>
+      <input id="i-label" type="text">
+      <!-- Sezione "Vincoli" (obbligatorio, sola lettura, disabilitato, lunghezze, formati…): la disegna constraints.js. -->
+      <div id="i-constraints" hidden></div>
+      <div id="i-repeat-row">
+        <label for="i-repeat">Elementi ripetuti</label>
+        <input id="i-repeat" type="number" min="0" max="60">
+      </div>
+      <label for="i-note">Nota per lo sviluppo</label>
+      <textarea id="i-note" placeholder="Comportamento, regole, dati, validazioni: arriva a chi svilupperà."></textarea>
+      <p class="hint" id="i-hint" hidden>Scomponi per spostare e annotare i singoli elementi che contiene.</p>
+      <p class="meta" id="i-meta"></p>
+      <div class="buttons">
+        <button type="button" id="i-duplicate" title="Ctrl+D">Duplica</button>
+        <button type="button" id="i-explode">Scomponi</button>
+        <button type="button" id="i-delete" class="danger" title="Canc">Elimina</button>
+      </div>
+    </form>
+  </div>
+</section>
+
 <script src="/vendor/gridstack-all.js"></script>
-<script>
-(() => {
-  const CELL = 28;
-  const MARGIN = 2;
-  const FREE_ROWS = 8;
-  const SAVE_DELAY = 150;
-  const SETTLE_DELAY = 60;
-  const PING_EVERY = 3000;
-  const MAX_FAILED_PINGS = 3;
-
-  const INSET = 3;
-  const PADDING = 8;
-  const SEGMENT = 64;
-  const WOBBLE = 1.6;
-  const WAVE = 14;
-  const TEXT_ROW = 18;
-  const MIN_FONT = 10;
-  const BODY_FONT = 14;
-  const LINE_HEIGHT = 1.2;
-  const LABEL_MATCH_LENGTH = 20;
-  const CHAR_WIDTH = 0.58;
-  const CHROME_HEIGHT = 42;
-  const STICKER_MIN_WIDTH = 120;
-  const STICKER_MIN_HEIGHT = 40;
-  const STICKERS = { new: 'nuovo', changed: 'modificato' };
-  const HEADING_SIZES = { h1: 34, h2: 28, h3: 22, h4: 18, h5: 16, h6: 15 };
-  const KINDS = {
-    h1: 'heading', h2: 'heading', h3: 'heading', h4: 'heading', h5: 'heading', h6: 'heading',
-    p: 'text', blockquote: 'text', pre: 'text', span: 'text', label: 'text',
-    a: 'link', button: 'button', input: 'input', textarea: 'input', select: 'input',
-    img: 'image', picture: 'image', svg: 'image', canvas: 'image', figure: 'image',
-    video: 'video', iframe: 'video', audio: 'video',
-    ul: 'list', ol: 'list', table: 'table',
-  };
-
-  const wf = document.getElementById('wf');
-  const sheet = document.getElementById('sheet');
-  const sheetSketch = document.getElementById('sheet-sketch');
-  const statusEl = document.getElementById('status');
-  const noticeEl = document.getElementById('notice');
-  const undoBtn = document.getElementById('undo');
-  const resetBtn = document.getElementById('reset');
-
-  const meta = new Map();
-  const captioned = new Set();
-  let spec = null;
-  let grid = null;
-  let baseline = [];
-  let history = [];
-  let touched = new Set();
-  let activeId = null;
-  let saveTimer = null;
-  let settleTimer = null;
-  let failedPings = 0;
-  let unsaved = false;
-  let closed = false;
-
-  function hashOf(text) {
-    let hash = 2166136261;
-    for (let index = 0; index < text.length; index += 1) {
-      hash = Math.imul(hash ^ text.charCodeAt(index), 16777619);
-    }
-    return hash >>> 0;
-  }
-
-  function randomFrom(seed) {
-    let state = seed;
-    return () => {
-      state = (state + 0x6d2b79f5) | 0;
-      let mixed = Math.imul(state ^ (state >>> 15), 1 | state);
-      mixed = (mixed + Math.imul(mixed ^ (mixed >>> 7), 61 | mixed)) ^ mixed;
-      return ((mixed ^ (mixed >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  const tidy = (value) => Math.round(value * 10) / 10;
-  const middle = ([ax, ay], [bx, by]) => [(ax + bx) / 2, (ay + by) / 2];
-
-  // Una penna per blocco, con il seme preso dal suo id: ridisegnando un blocco
-  // della stessa misura le linee restano uguali e non tremano a ogni aggiornamento.
-  function createPen(seed) {
-    const random = randomFrom(seed);
-    const shake = (amount) => (random() - 0.5) * 2 * amount;
-
-    // Curva tra i punti medi: gli spigoli si ammorbidiscono come in un tratto a mano.
-    function curve(points, closed) {
-      const [startX, startY] = closed ? middle(points.at(-1), points[0]) : points[0];
-      const last = closed ? points.length : points.length - 1;
-      let path = `M${tidy(startX)} ${tidy(startY)}`;
-      for (let index = closed ? 0 : 1; index < last; index += 1) {
-        const [controlX, controlY] = points[index];
-        const [x, y] = middle(points[index], points[(index + 1) % points.length]);
-        path += `Q${tidy(controlX)} ${tidy(controlY)} ${tidy(x)} ${tidy(y)}`;
-      }
-      if (closed) return `${path}Z`;
-      const [endX, endY] = points.at(-1);
-      return `${path}L${tidy(endX)} ${tidy(endY)}`;
-    }
-
-    function stroke(fromX, fromY, toX, toY) {
-      const length = Math.hypot(toX - fromX, toY - fromY) || 1;
-      const steps = Math.max(2, Math.round(length / SEGMENT));
-      const normalX = (fromY - toY) / length;
-      const normalY = (toX - fromX) / length;
-      const points = [];
-      for (let step = 0; step <= steps; step += 1) {
-        const offset = step === 0 || step === steps ? 0 : shake(WOBBLE);
-        points.push([
-          fromX + ((toX - fromX) * step) / steps + normalX * offset,
-          fromY + ((toY - fromY) * step) / steps + normalY * offset,
-        ]);
-      }
-      return curve(points, false);
-    }
-
-    const trace = (points) => points.slice(1).map((point, index) => stroke(...points[index], ...point)).join('');
-
-    function box({ x, y, w, h }, radius = 8) {
-      const round = Math.min(radius, w / 3, h / 3);
-      const corners = [[x, y], [x + w, y], [x + w, y + h], [x, y + h]];
-      const points = corners.flatMap(([cornerX, cornerY], index) => {
-        const [nextX, nextY] = corners[(index + 1) % corners.length];
-        const length = Math.hypot(nextX - cornerX, nextY - cornerY) || 1;
-        const alongX = (nextX - cornerX) / length;
-        const alongY = (nextY - cornerY) / length;
-        const steps = Math.max(1, Math.round(length / SEGMENT));
-        const side = [[cornerX + shake(0.8), cornerY + shake(0.8)]];
-        for (let step = 0; step <= steps; step += 1) {
-          const distance = round + ((length - round * 2) * step) / steps;
-          const offset = shake(WOBBLE);
-          side.push([cornerX + alongX * distance - alongY * offset, cornerY + alongY * distance + alongX * offset]);
-        }
-        return side;
-      });
-      return curve(points, true);
-    }
-
-    function ring(centerX, centerY, radius) {
-      const steps = Math.max(8, Math.round(radius));
-      const points = [];
-      for (let step = 0; step < steps; step += 1) {
-        const angle = (step / steps) * Math.PI * 2;
-        const reach = radius + shake(Math.min(1, radius * 0.08));
-        points.push([centerX + Math.cos(angle) * reach, centerY + Math.sin(angle) * reach]);
-      }
-      return curve(points, true);
-    }
-
-    function scribble(x, y, length) {
-      let path = `M${tidy(x)} ${tidy(y)}`;
-      let direction = -1;
-      for (let done = 0; done < length; done += WAVE) {
-        const step = Math.min(WAVE, length - done);
-        path += `q${tidy(step / 2)} ${tidy(direction * (2.6 + shake(0.8)))} ${tidy(step)} ${tidy(shake(0.6))}`;
-        direction = -direction;
-      }
-      return path;
-    }
-
-    return { box, ring, scribble, stroke, trace, vary: (value, spread) => value + shake(spread) };
-  }
-
-  function pad(rect, x, y = x) {
-    return { x: rect.x + x, y: rect.y + y, w: Math.max(1, rect.w - x * 2), h: Math.max(1, rect.h - y * 2) };
-  }
-
-  // La larghezza del testo è stimata: basta a scegliere il corpo, il resto lo taglia il CSS.
-  function fitText(text, rect, maxSize, minSize) {
-    const longestWord = Math.max(...text.split(' ').map((word) => word.length));
-    for (let size = maxSize; size > minSize; size -= 1) {
-      const lines = Math.max(1, Math.ceil((text.length * size * CHAR_WIDTH) / rect.w));
-      const keepsWords = longestWord * size * CHAR_WIDTH <= rect.w;
-      if (keepsWords && lines * size * LINE_HEIGHT <= rect.h) return { size, lines };
-    }
-    return { size: minSize, lines: Math.max(1, Math.floor(rect.h / (minSize * LINE_HEIGHT))) };
-  }
-
-  // I testi arrivano dalla pagina: restano sempre textContent, mai markup.
-  function createScene(content, seed) {
-    const paths = [];
-    const labels = [];
-
-    function addSpan(className, text, style) {
-      const element = document.createElement('span');
-      element.className = className;
-      element.textContent = text;
-      element.style.cssText = style;
-      labels.push(element);
-    }
-
-    return {
-      pen: createPen(seed),
-      path(path, className = '') {
-        paths.push(`<path class="${className}" d="${path}"/>`);
-      },
-      label(rect, text, className, maxSize, minSize = MIN_FONT) {
-        if (!text) return;
-        const { size, lines } = fitText(text, rect, maxSize, minSize);
-        const top = rect.y + (rect.h - lines * size * LINE_HEIGHT) / 2;
-        addSpan(className, text, `left:${tidy(rect.x)}px;top:${tidy(top)}px;width:${tidy(rect.w)}px;font-size:${size}px;-webkit-line-clamp:${lines}`);
-      },
-      sticker(text) {
-        addSpan('sticker', text, '');
-      },
-      paint() {
-        content.querySelector(':scope > .sk').innerHTML = paths.join('');
-        content.querySelector(':scope > .sk-text').replaceChildren(...labels);
-      },
-    };
-  }
-
-  // Con `framed` il disegno ha un bordo suo. Senza, è il blocco intero: il bordo è già il suo.
-  const widgets = {
-    heading(scene, rect, text, { size = 26 }) {
-      scene.label(rect, text, 'heading', size);
-    },
-
-    text(scene, rect, text) {
-      const rows = Math.max(1, Math.floor(rect.h / TEXT_ROW));
-      const top = rect.y + (rect.h - rows * TEXT_ROW) / 2;
-      for (let row = 0; row < rows; row += 1) {
-        const y = top + row * TEXT_ROW;
-        if (row === 0 && text) {
-          scene.label({ ...rect, y, h: TEXT_ROW }, text, 'body', BODY_FONT, BODY_FONT);
-        } else {
-          const share = row === rows - 1 && rows > 1 ? scene.pen.vary(0.6, 0.12) : scene.pen.vary(0.93, 0.05);
-          scene.path(scene.pen.scribble(rect.x + 1, y + TEXT_ROW / 2, rect.w * share), 'scribble');
-        }
-      }
-    },
-
-    link(scene, rect, text) {
-      scene.label(rect, text, 'link', 15);
-    },
-
-    button(scene, rect, text, { framed }) {
-      if (framed) scene.path(scene.pen.box(rect, 7), 'shade');
-      scene.label(pad(rect, 4, 1), text, 'strong center', 15);
-    },
-
-    input(scene, rect, text, { framed }) {
-      if (framed) scene.path(scene.pen.box(rect, 4), 'field');
-      scene.label(pad(rect, 7, 1), text, 'faint', BODY_FONT);
-    },
-
-    box(scene, rect, text) {
-      scene.path(scene.pen.box(rect, 6), 'shade');
-      scene.label(pad(rect, 6, 2), text, 'center', BODY_FONT);
-    },
-
-    image(scene, rect, text, { framed }) {
-      const { pen } = scene;
-      if (framed) scene.path(pen.box(rect, 5), 'shade');
-
-      if (rect.w < 44 || rect.h < 30) {
-        scene.path(pen.stroke(rect.x, rect.y, rect.x + rect.w, rect.y + rect.h) + pen.stroke(rect.x + rect.w, rect.y, rect.x, rect.y + rect.h), 'mark');
-        return;
-      }
-
-      const caption = text && rect.h >= 90 ? 20 : 0;
-      const size = Math.min(rect.w * 0.5, (rect.h - caption) * 0.66);
-      const centerX = rect.x + rect.w / 2;
-      const centerY = rect.y + (rect.h - caption) / 2;
-      const base = centerY + size * 0.42;
-      scene.path(pen.trace([
-        [centerX - size * 0.62, base],
-        [centerX - size * 0.2, centerY - size * 0.26],
-        [centerX + size * 0.05, centerY + size * 0.08],
-        [centerX + size * 0.28, centerY - size * 0.1],
-        [centerX + size * 0.62, base],
-        [centerX - size * 0.62, base],
-      ]), 'mark');
-      scene.path(pen.ring(centerX + size * 0.38, centerY - size * 0.32, size * 0.11), 'mark');
-      if (caption) scene.label({ ...rect, y: rect.y + rect.h - caption, h: caption - 2 }, text, 'faint center', 12);
-    },
-
-    video(scene, rect, text, { framed }) {
-      const { pen } = scene;
-      if (framed) scene.path(pen.box(rect, 5), 'shade');
-      const radius = Math.min(rect.w, rect.h) * 0.26;
-      const centerX = rect.x + rect.w / 2;
-      const centerY = rect.y + rect.h / 2;
-      scene.path(pen.ring(centerX, centerY, radius), 'mark');
-      scene.path(pen.trace([
-        [centerX - radius * 0.32, centerY - radius * 0.46],
-        [centerX + radius * 0.52, centerY],
-        [centerX - radius * 0.32, centerY + radius * 0.46],
-        [centerX - radius * 0.32, centerY - radius * 0.46],
-      ]), 'solid');
-    },
-
-    list(scene, rect, text) {
-      const rows = Math.max(1, Math.floor(rect.h / TEXT_ROW));
-      for (let row = 0; row < rows; row += 1) {
-        const y = rect.y + row * TEXT_ROW;
-        scene.path(scene.pen.ring(rect.x + 4, y + TEXT_ROW / 2, 2.2), 'solid');
-        if (row === 0 && text) {
-          scene.label({ x: rect.x + 13, y, w: rect.w - 13, h: TEXT_ROW }, text, 'body', BODY_FONT, BODY_FONT);
-        } else {
-          scene.path(scene.pen.scribble(rect.x + 14, y + TEXT_ROW / 2, (rect.w - 14) * scene.pen.vary(0.7, 0.2)), 'scribble');
-        }
-      }
-    },
-
-    table(scene, rect) {
-      const { pen } = scene;
-      const columns = Math.max(2, Math.min(5, Math.round(rect.w / 110)));
-      const rows = Math.max(2, Math.min(8, Math.floor(rect.h / 22)));
-      for (let row = 1; row < rows; row += 1) {
-        const y = rect.y + (rect.h * row) / rows;
-        scene.path(pen.stroke(rect.x, y, rect.x + rect.w, y), 'mark');
-      }
-      for (let column = 1; column < columns; column += 1) {
-        const x = rect.x + (rect.w * column) / columns;
-        scene.path(pen.stroke(x, rect.y, x, rect.y + rect.h), 'mark');
-      }
-    },
-
-    gallery(scene, rect, count) {
-      const columns = Math.min(count, Math.max(1, Math.round(Math.sqrt((count * rect.w) / rect.h))));
-      const rows = Math.ceil(count / columns);
-      const gap = 6;
-      const w = (rect.w - gap * (columns - 1)) / columns;
-      const h = (rect.h - gap * (rows - 1)) / rows;
-      for (let index = 0; index < count; index += 1) {
-        const x = rect.x + (index % columns) * (w + gap);
-        const y = rect.y + Math.floor(index / columns) * (h + gap);
-        scene.path(scene.pen.box({ x, y, w, h }, 5), 'shade');
-      }
-    },
-
-    content(scene, rect, text) {
-      const title = Math.min(22, rect.h);
-      scene.label({ ...rect, h: title }, text, 'strong', 15);
-      if (rect.h >= title + TEXT_ROW) {
-        widgets.text(scene, { ...rect, y: rect.y + title, h: rect.h - title }, '');
-      }
-    },
-  };
-
-  function draw(content) {
-    const info = meta.get(content.dataset.block);
-    const { clientWidth: width, clientHeight: height } = content;
-    if (!info || width < 12 || height < 12) return;
-
-    const { kind } = content.parentElement.dataset;
-    const frame = { x: INSET, y: INSET, w: width - INSET * 2, h: height - INSET * 2 };
-    const inner = pad(frame, PADDING, 1);
-    const scene = createScene(content, hashOf(info.id));
-    const label = info.label ?? '';
-
-    scene.path(scene.pen.box(frame), 'outline');
-
-    if (kind === 'section') {
-      if (captioned.has(info.id)) scene.label({ x: 11, y: 4, w: width - 22, h: 16 }, label, 'caption', 12, 11);
-    } else if (info.parts?.length > 0) {
-      for (const [partKind, x, y, w, h, text = ''] of info.parts) {
-        const rect = {
-          x: frame.x + (x / 100) * frame.w,
-          y: frame.y + (y / 100) * frame.h,
-          w: Math.max(6, (w / 100) * frame.w),
-          h: Math.max(6, (h / 100) * frame.h),
-        };
-        (widgets[partKind] ?? widgets.box)(scene, rect, text, { framed: true });
-      }
-    } else if (info.repeat) {
-      widgets.gallery(scene, inner, info.repeat);
-    } else {
-      (widgets[kind] ?? widgets.content)(scene, inner, label, { size: HEADING_SIZES[info.tag] });
-    }
-
-    const sticker = STICKERS[info.status];
-    if (sticker && width >= STICKER_MIN_WIDTH && height >= STICKER_MIN_HEIGHT) scene.sticker(sticker);
-    scene.paint();
-  }
-
-  function drawSheet() {
-    const { clientWidth: width, clientHeight: height } = sheet;
-    const pen = createPen(hashOf('pagina'));
-    const paths = [
-      ['outline', pen.box({ x: 2, y: 2, w: width - 4, h: height - 4 }, 12)],
-      ['', pen.stroke(2, CHROME_HEIGHT, width - 2, CHROME_HEIGHT)],
-      ['', pen.ring(22, 22, 6)],
-      ['', pen.ring(41, 22, 6)],
-      ['', pen.ring(60, 22, 6)],
-      ['field', pen.box({ x: 82, y: 9, w: width - 104, h: 25 }, 9)],
-    ];
-    sheetSketch.innerHTML = paths.map(([className, path]) => `<path class="${className}" d="${path}"/>`).join('');
-  }
-
-  // Un blocco si ridisegna ogni volta che cambia misura, anche mentre lo si ridimensiona.
-  const pens = new ResizeObserver((entries) => {
-    for (const entry of entries) draw(entry.target);
-  });
-
-  // Il label di una sezione è quasi sempre il suo primo titolo: ripeterlo sopra sarebbe rumore.
-  function isShownInside(block, label) {
-    const opening = (text) => (text ?? '').slice(0, LABEL_MATCH_LENGTH);
-    return (block.children ?? []).some(
-      (child) =>
-        opening(child.label) === opening(label) ||
-        child.parts?.some((part) => opening(part[5]) === opening(label)) ||
-        isShownInside(child, label),
-    );
-  }
-
-  function registerBlocks(blocks) {
-    for (const block of blocks) {
-      const { children, x, y, w, h, ...info } = block;
-      if (meta.has(block.id)) console.warn(`Blocco duplicato: ${block.id}`);
-      meta.set(block.id, info);
-      if (block.label && !isShownInside(block, block.label)) captioned.add(block.id);
-      registerBlocks(children ?? []);
-    }
-  }
-
-  function findNode(id, target = grid) {
-    for (const node of target.engine.nodes) {
-      if (node.id === id) return node;
-      const nested = node.subGrid && findNode(id, node.subGrid);
-      if (nested) return nested;
-    }
-    return null;
-  }
-
-  function forEachSection(target, callback) {
-    for (const node of target.engine.nodes) {
-      if (!node.subGrid) continue;
-      callback(node);
-      forEachSection(node.subGrid, callback);
-    }
-  }
-
-  // Un blocco entra in una sezione solo se è più stretto di lei o se ci stava
-  // già: così le sezioni a tutta larghezza si riordinano invece di annidarsi.
-  function canEnter(sectionId, element) {
-    const block = element.gridstackNode;
-    const section = findNode(sectionId);
-    if (!block || !section) return false;
-    const original = flatten(baseline).find((item) => item.id === block.id);
-    return block.w < section.w || original?.parent === sectionId;
-  }
-
-  // Durante il trascinamento una griglia annidata crescerebbe seguendo il mouse,
-  // che così non uscirebbe mai dalla sezione: va bloccata fino al rilascio.
-  // updateOptions({ maxRow: 0 }) compatterebbe la sezione: il limite va scritto a mano.
-  function setRowLimit(subGrid, rows) {
-    subGrid.opts.maxRow = rows;
-    subGrid.engine.maxRow = rows;
-  }
-
-  // Il margine pari all'altezza del blocco lascia spazio per spingere gli altri.
-  function capSections(activeNode) {
-    forEachSection(grid, (section) => {
-      setRowLimit(section.subGrid, Math.max(1, section.h - 1) + activeNode.h);
-    });
-  }
-
-  function uncapSections() {
-    forEachSection(grid, (section) => setRowLimit(section.subGrid, 0));
-  }
-
-  function toWidget(block) {
-    const children = block.children ?? [];
-    const widget = { id: block.id, x: block.x, y: block.y, w: block.w, h: block.h };
-    if (children.length > 0 || block.container) {
-      widget.subGridOpts = {
-        column: 'auto',
-        cellHeight: CELL,
-        margin: MARGIN,
-        float: true,
-        acceptWidgets: (element) => canEnter(block.id, element),
-        minRow: 0,
-        children: children.map(toWidget),
-      };
-    }
-    return widget;
-  }
-
-  GridStack.renderCB = (content, widget) => {
-    const info = meta.get(widget.id);
-    const item = content.parentElement;
-    if (!info || !item) return;
-
-    const isSection = Boolean(widget.subGridOpts);
-    item.dataset.tag = info.tag ?? '';
-    item.dataset.status = info.status ?? 'existing';
-    item.dataset.kind = isSection ? 'section' : info.kind ?? KINDS[info.tag] ?? 'content';
-    if (info.tone) item.dataset.tone = info.tone;
-    item.classList.toggle('section', isSection);
-
-    const tag = info.repeat ? `${info.tag} ×${info.repeat}` : info.tag;
-    content.dataset.block = widget.id;
-    content.title = [tag, info.label, info.selector].filter(Boolean).join(' · ');
-    content.insertAdjacentHTML('beforeend', '<svg class="sk" aria-hidden="true"></svg><div class="sk-text"></div>');
-    pens.observe(content);
-  };
-
-  function readGrid(target) {
-    return [...target.engine.nodes]
-      .sort((a, b) => a.y - b.y || a.x - b.x)
-      .map((node) => {
-        // I disegni restano in meta: nel risultato peserebbero senza servire a Claude.
-        const { parts, ...info } = meta.get(node.id);
-        const block = { ...info, x: node.x, y: node.y, w: node.w, h: node.h };
-        if (node.subGrid) {
-          block.container = true;
-          block.children = readGrid(node.subGrid);
-        }
-        return block;
-      });
-  }
-
-  function flatten(blocks, parent = null) {
-    return blocks.flatMap((block) => [
-      { id: block.id, parent, x: block.x, y: block.y, w: block.w, h: block.h },
-      ...flatten(block.children ?? [], block.id),
-    ]);
-  }
-
-  function changeKinds(from, to) {
-    const kinds = [];
-    if (from.parent !== to.parent) kinds.push('parent');
-    if (from.x !== to.x || from.y !== to.y) kinds.push('position');
-    if (from.w !== to.w || from.h !== to.h) kinds.push('size');
-    return kinds;
-  }
-
-  function computeMoves(blocks) {
-    const before = new Map(flatten(baseline).map((block) => [block.id, block]));
-    return flatten(blocks).flatMap(({ id, ...to }) => {
-      const { id: _, ...from } = before.get(id);
-      const kinds = changeKinds(from, to);
-      if (kinds.length === 0) return [];
-      const { tag, label, selector } = meta.get(id);
-      return [{ id, tag, label, selector, touched: touched.has(id), kinds, from, to }];
-    });
-  }
-
-  function bands(blocks, start, end) {
-    const groups = [];
-    let edge = -Infinity;
-    for (const block of [...blocks].sort((a, b) => start(a) - start(b))) {
-      if (start(block) >= edge) {
-        groups.push([]);
-        edge = -Infinity;
-      }
-      groups.at(-1).push(block);
-      edge = Math.max(edge, end(block));
-    }
-    return groups;
-  }
-
-  function outline(blocks, indent = '') {
-    const name = (block) => `${block.tag} "${block.label ?? ''}"`;
-    const span = (column) => Math.max(...column.map((block) => block.x + block.w)) - Math.min(...column.map((block) => block.x));
-
-    return bands(blocks, (block) => block.y, (block) => block.y + block.h).flatMap((row) => {
-      const columns = bands(row, (block) => block.x, (block) => block.x + block.w);
-      const line = columns
-        .map((column) => {
-          const stacked = column.sort((a, b) => a.y - b.y).map(name).join(' / ');
-          return `${stacked} [${span(column)}/12]`;
-        })
-        .join(' | ');
-      const nested = row
-        .filter((block) => block.children?.length)
-        .flatMap((block) => [`${indent}  dentro ${name(block)}:`, ...outline(block.children, `${indent}    `)]);
-      return [indent + line, ...nested];
-    });
-  }
-
-  function buildResult() {
-    const final = readGrid(grid);
-    const moves = computeMoves(final);
-    return {
-      opened: true,
-      page: spec.page,
-      source: spec.source,
-      changed: moves.length > 0,
-      moves,
-      outline: outline(final).join('\n'),
-      final,
-    };
-  }
-
-  function fitSections(target) {
-    for (const node of target.engine.nodes) {
-      if (!node.subGrid) continue;
-      fitSections(node.subGrid);
-      const needed = node.subGrid.engine.getRow() + 1;
-      if (needed > node.h) target.update(node.el, { h: needed });
-    }
-  }
-
-  function mount(blocks) {
-    pens.disconnect();
-    if (grid) {
-      grid.destroy(false);
-      wf.replaceChildren();
-    }
-    const lastRow = Math.max(0, ...blocks.map((block) => block.y + block.h));
-    grid = GridStack.addGrid(wf, {
-      column: 12,
-      cellHeight: CELL,
-      margin: MARGIN,
-      float: true,
-      acceptWidgets: true,
-      minRow: lastRow + FREE_ROWS,
-      resizable: { handles: 'e,se,s' },
-      children: blocks.map(toWidget),
-    });
-    fitSections(grid);
-  }
-
-  function paintTouched() {
-    for (const item of wf.querySelectorAll('.grid-stack-item')) {
-      item.classList.toggle('touched', touched.has(item.getAttribute('gs-id')));
-    }
-  }
-
-  function snapshot() {
-    return JSON.stringify({ blocks: readGrid(grid), touched: [...touched] });
-  }
-
-  function refreshControls() {
-    const changed = computeMoves(readGrid(grid)).length;
-    undoBtn.disabled = closed || history.length < 2;
-    resetBtn.disabled = closed || changed === 0;
-    paintTouched();
-    return changed;
-  }
-
-  function save() {
-    if (closed) return;
-    const changed = refreshControls();
-    const summary = changed === 1 ? '1 blocco cambiato' : changed > 1 ? `${changed} blocchi cambiati` : 'Nessuna modifica';
-    statusEl.textContent = 'Salvataggio';
-
-    unsaved = true;
-    clearTimeout(saveTimer);
-    saveTimer = setTimeout(async () => {
-      try {
-        const response = await fetch('/state', { method: 'POST', body: JSON.stringify(buildResult()) });
-        if (!response.ok) throw new Error(`stato ${response.status}`);
-        unsaved = false;
-        statusEl.textContent = summary;
-      } catch {
-        statusEl.textContent = 'Non salvato';
-      }
-    }, SAVE_DELAY);
-  }
-
-  function commit() {
-    const current = snapshot();
-    if (current === history.at(-1)) return;
-    history.push(current);
-    save();
-  }
-
-  function restore(state) {
-    touched = new Set(state.touched);
-    mount(state.blocks);
-  }
-
-  function hasMoved(id) {
-    const previous = JSON.parse(history.at(-1)).blocks;
-    const from = flatten(previous).find((block) => block.id === id);
-    const to = flatten(readGrid(grid)).find((block) => block.id === id);
-    return Boolean(from && to && changeKinds(from, to).length > 0);
-  }
-
-  function settle() {
-    if (!grid || closed) return;
-    uncapSections();
-    fitSections(grid);
-    if (activeId && hasMoved(activeId)) touched.add(activeId);
-    activeId = null;
-    commit();
-  }
-
-  function undo() {
-    if (history.length < 2) return;
-    history.pop();
-    restore(JSON.parse(history.at(-1)));
-    save();
-  }
-
-  function reset() {
-    touched = new Set();
-    mount(baseline);
-    commit();
-  }
-
-  function markClosed() {
-    if (closed) return;
-    closed = true;
-    clearTimeout(saveTimer);
-    grid?.setStatic(true);
-    undoBtn.disabled = true;
-    resetBtn.disabled = true;
-    statusEl.textContent = 'Chiuso';
-    noticeEl.textContent = 'Il mockup è chiuso e non si può più modificare. Se non hai finito, chiedi a Claude di riaprirlo.';
-    noticeEl.classList.add('done');
-  }
-
-  function showError(message) {
-    statusEl.textContent = 'Errore';
-    noticeEl.textContent = message;
-    noticeEl.classList.add('error');
-  }
-
-  async function start() {
-    const response = await fetch('/spec').catch(() => null);
-    if (!response?.ok) {
-      showError('Non riesco a leggere il mockup: chiedi a Claude di riaprirlo.');
-      return;
-    }
-
-    spec = await response.json();
-    registerBlocks(spec.blocks);
-    document.title = `Mockup: ${spec.page ?? 'pagina'}`;
-    document.getElementById('page').textContent = spec.page ?? '';
-    document.getElementById('address').textContent = spec.source ?? '';
-
-    mount(spec.blocks);
-    baseline = readGrid(grid);
-    history = [snapshot()];
-
-    // Dopo un ricaricamento riparte dall'ultimo stato, per non perdere il lavoro.
-    const stored = await fetch('/state').catch(() => null);
-    const saved = stored?.status === 200 ? await stored.json() : null;
-    if (saved?.final) {
-      touched = new Set(saved.moves.filter((move) => move.touched).map((move) => move.id));
-      mount(saved.final);
-      history.push(snapshot());
-    }
-    save();
-
-    setInterval(async () => {
-      const ping = await fetch('/ping').catch(() => null);
-      failedPings = ping?.ok ? 0 : failedPings + 1;
-      if (failedPings >= MAX_FAILED_PINGS) markClosed();
-      else if (ping?.ok && unsaved) save();
-    }, PING_EVERY);
-  }
-
-  const onPress = (event) => {
-    activeId = event.target.closest?.('.grid-stack-item')?.getAttribute('gs-id') ?? null;
-    const node = activeId && findNode(activeId);
-    if (node && !event.target.closest('.ui-resizable-handle')) capSections(node);
-  };
-  const onRelease = () => {
-    clearTimeout(settleTimer);
-    settleTimer = setTimeout(settle, SETTLE_DELAY);
-  };
-
-  document.addEventListener('mousedown', onPress, true);
-  document.addEventListener('touchstart', onPress, true);
-  document.addEventListener('mouseup', onRelease, true);
-  document.addEventListener('touchend', onRelease, true);
-  document.addEventListener('keydown', (event) => {
-    if ((event.metaKey || event.ctrlKey) && !event.shiftKey && event.key.toLowerCase() === 'z') {
-      event.preventDefault();
-      undo();
-    }
-  });
-  new ResizeObserver(drawSheet).observe(sheet);
-  undoBtn.addEventListener('click', undo);
-  resetBtn.addEventListener('click', reset);
-
-  window.WF = { result: buildResult, settle, undo, reset, grid: () => grid };
-  start();
-})();
-</script>
+<!-- Esportazione PNG del foglio. -->
+<script src="/vendor/html-to-image.js"></script>
+<script src="/catalog.js"></script>
+<script src="/sketch.js"></script>
+<!-- Vincoli dei campi, facoltativi: l'editor funziona anche se window.WF_CONSTRAINTS manca. -->
+<script src="/constraints.js"></script>
+<script src="/editor.js"></script>
 </body>
 </html>
