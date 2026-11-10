@@ -14,7 +14,8 @@ import { fileURLToPath } from 'node:url';
 
 const ASSETS = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'assets');
 const IDLE_MS = 60 * 60 * 1000;
-const MAX_BODY = 4 * 1024 * 1024;
+const MAX_BODY = 8 * 1024 * 1024;
+const EDITOR_FILES = new Set(['/editor.js', '/catalog.js', '/sketch.js', '/themes.css', '/constraints.js']);
 const TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.gif': 'image/gif',
@@ -99,7 +100,7 @@ function touch() {
 async function handleWireframe(req, res, url) {
   const { pathname } = url;
   if (req.method === 'GET' && pathname === '/') return sendFile(res, ASSETS, '/editor.html');
-  if (req.method === 'GET' && pathname.startsWith('/vendor/')) return sendFile(res, ASSETS, pathname);
+  if (req.method === 'GET' && (pathname.startsWith('/vendor/') || EDITOR_FILES.has(pathname))) return sendFile(res, ASSETS, pathname);
   if (req.method === 'GET' && pathname === '/spec') return sendJson(res, 200, spec);
   if (req.method === 'GET' && pathname === '/ping') return send(res, 204);
   if (req.method === 'GET' && pathname === '/state') return state ? sendJson(res, 200, state) : send(res, 204);
@@ -114,7 +115,11 @@ async function handleWireframe(req, res, url) {
   }
 
   if (req.method === 'GET' && pathname === '/result') {
-    const result = state ?? { opened: false, changed: false, moves: [], final: spec.blocks };
+    // Lo snapshot serve solo all'editor per riprendere dopo un ricaricamento.
+    const { snapshot, ...saved } = state ?? {};
+    const result = state
+      ? saved
+      : { opened: false, changed: false, moves: [], added: [], removed: [], edited: [], notes: [], final: spec.blocks };
     if (url.searchParams.get('close') === '1') shutdown(res, 'risultato letto');
     return sendJson(res, 200, result);
   }

@@ -1,0 +1,226 @@
+/* Temi dell'editor: colori, font e forma dell'interfaccia e del disegno.
+   L'editor imposta body[data-theme]; la penna (a mano o netta) la sceglie sketch.js.
+   Gli stati (nuovo blu, modificato ambra, spostato viola, selezionato rosa tratteggiato)
+   cambiano tonalità ma restano riconoscibili in ogni tema. */
+
+body {
+  --hand: "Comic Sans MS", "Comic Sans", "Comic Neue", "Chalkboard SE", "Marker Felt", cursive;
+  --clean-font: system-ui, "Segoe UI", Roboto, sans-serif;
+  --note-bg: #ffe680;
+  --note-ink: #5a4500;
+  --note-edge: #b8932a;
+}
+
+/* ---------------------------------------------------------------- forma: temi puliti */
+
+/* Angoli regolari e ombre morbide: niente bordi tremolanti né ombre spostate. */
+body:not([data-theme="schizzo"]) {
+  --font: var(--clean-font);
+  --wobbly: 5px;
+  --field-radius: 4px;
+  --line: 1px;
+  --bar-line: 1px;
+  --panel-line: 1px;
+  --btn-shadow: 0 1px 2px var(--shadow);
+  --btn-shadow-hover: 0 2px 5px var(--shadow);
+  --btn-shadow-danger: 0 1px 2px var(--shadow);
+  --btn-shadow-small: none;
+  --lift: 0 0;
+  --press: 0 1px;
+  --panel-shadow: 0 6px 20px var(--shadow);
+  --menu-shadow: 0 6px 16px var(--shadow);
+  --drop-shadow: drop-shadow(0 6px 10px var(--shadow));
+  --tilt: 0deg;
+  --drag-tilt: 0deg;
+  --stroke: 1.5;
+  --stroke-thin: 1.5;
+  --sheet-weight: 1.5;
+  --block-weight: 1.5;
+  --hover-weight: 2.5;
+  --touched-weight: 3;
+  --drag-weight: 3;
+  --select-radius: 6px;
+}
+
+/* Nei temi puliti il passaggio del mouse schiarisce il bottone invece di sollevarlo. */
+body:not([data-theme="schizzo"]) button:hover:not(:disabled):not([aria-pressed="true"]) { background: var(--wash); }
+
+/* ---------------------------------------------------------------- Wireframe pulito (predefinito) */
+
+body[data-theme="pulito"] {
+  color-scheme: light;
+  --page: #f3f4f6;
+  --sheet: #ffffff;
+  --guide: rgba(17, 24, 39, 0.045);
+  --ink: #24292f;
+  --soft: #6b7280;
+  --edge: #c9ced6;
+  --block: #ffffff;
+  --wash: #eceff3;
+  --readonly-bg: #f0f1f3;
+  --night: #2f343b;
+  --night-wash: #454b54;
+  --night-soft: #c5cad1;
+  --night-text: #f8f9fa;
+  --link: #1f5fbf;
+  --night-link: #a9cdf7;
+  --shadow: rgba(17, 24, 39, 0.14);
+  --new-bg: #dcecfb;
+  --new-shade: #c1dcf6;
+  --new-ink: #0c447c;
+  --changed-bg: #fdf0cf;
+  --changed-shade: #f6dea2;
+  --changed-ink: #6b4304;
+  --touched: #6a35c9;
+  --selected: #d6336c;
+  --danger: #b42318;
+}
+
+/* ---------------------------------------------------------------- Pulito scuro */
+
+body[data-theme="pulito-scuro"] {
+  color-scheme: dark;
+  --page: #15171a;
+  --sheet: #1d2024;
+  --guide: rgba(255, 255, 255, 0.04);
+  --ink: #e6e8eb;
+  --soft: #9aa1ab;
+  --edge: #3a3f46;
+  --block: #24282d;
+  --wash: #30353c;
+  --readonly-bg: #2b2f35;
+  --night: #101215;
+  --night-wash: #2a2e34;
+  --night-soft: #a3a9b2;
+  --night-text: #eef0f2;
+  --link: #7db4ff;
+  --night-link: #8cbcf5;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --new-bg: #12385f;
+  --new-shade: #1b4f83;
+  --new-ink: #cfe5fb;
+  --changed-bg: #523409;
+  --changed-shade: #6e4810;
+  --changed-ink: #fbe6c2;
+  --touched: #c3a6ff;
+  --selected: #ff8fb4;
+  --danger: #f09595;
+}
+
+/* ---------------------------------------------------------------- Blueprint */
+
+/* I blocchi hanno il colore del foglio: restano le linee, come in una tavola tecnica. */
+body[data-theme="blueprint"] {
+  color-scheme: dark;
+  --page: #1a447c;
+  --sheet: #1f4e8c;
+  --guide: rgba(255, 255, 255, 0.07);
+  --ink: #eef5ff;
+  --soft: #a8c4ea;
+  --edge: #5f8fcf;
+  --block: #1f4e8c;
+  --wash: #2a5d9f;
+  --readonly-bg: #2a5893;
+  --night: #143a6b;
+  --night-wash: #224f8a;
+  --night-soft: #a8c4ea;
+  --night-text: #ffffff;
+  --link: #ffffff;
+  --night-link: #ffffff;
+  --shadow: rgba(5, 20, 45, 0.45);
+  --new-bg: #0e6fa8;
+  --new-shade: #1687c9;
+  --new-ink: #e0f5ff;
+  --changed-bg: #8a6410;
+  --changed-shade: #a57a17;
+  --changed-ink: #fff3d1;
+  --touched: #e0c8ff;
+  --selected: #ff9ccb;
+  --danger: #ffb3b3;
+}
+
+/* ---------------------------------------------------------------- Schizzo (l'aspetto a mano) */
+
+body[data-theme="schizzo"] {
+  color-scheme: light dark;
+  --font: var(--hand);
+  --wobbly: 14px 5px 12px 6px / 6px 12px 5px 14px;
+  --field-radius: 6px 3px 7px 4px / 4px 7px 3px 6px;
+  --line: 2px;
+  --bar-line: 3px;
+  --panel-line: 2.5px;
+  --btn-shadow: 2px 3px 0 var(--ink);
+  --btn-shadow-hover: 3px 4px 0 var(--ink);
+  --btn-shadow-danger: 2px 3px 0 var(--danger);
+  --btn-shadow-small: 1px 2px 0 var(--ink);
+  --lift: -1px -1px;
+  --press: 2px 3px;
+  --panel-shadow: 5px 6px 0 var(--shadow);
+  --menu-shadow: 4px 5px 0 var(--shadow);
+  --drop-shadow: drop-shadow(6px 7px 0 var(--shadow));
+  --tilt: 2deg;
+  --drag-tilt: -1.2deg;
+  --stroke: 2;
+  --stroke-thin: 1.8;
+  --sheet-weight: 3;
+  --block-weight: 2.8;
+  --hover-weight: 4.2;
+  --touched-weight: 4;
+  --drag-weight: 6;
+  --select-radius: 10px;
+
+  --page: #efece3;
+  --sheet: #fffefb;
+  --guide: rgba(40, 38, 30, 0.05);
+  --ink: #262522;
+  --soft: #75726a;
+  --edge: var(--ink);
+  --block: #ffffff;
+  --wash: #e4e1d8;
+  --readonly-bg: #eeebe2;
+  --night: #3b3a36;
+  --night-wash: #56554f;
+  --night-soft: #c9c7bd;
+  --night-text: #fbfaf5;
+  --link: #1f5fbf;
+  --night-link: #a9cdf7;
+  --shadow: rgba(38, 37, 34, 0.3);
+  --new-bg: #dcecfb;
+  --new-shade: #c1dcf6;
+  --new-ink: #0c447c;
+  --changed-bg: #fbeccd;
+  --changed-shade: #f5dca9;
+  --changed-ink: #633806;
+  --touched: #6a35c9;
+  --selected: #d6336c;
+  --danger: #a32d2d;
+}
+
+@media (prefers-color-scheme: dark) {
+  body[data-theme="schizzo"] {
+    --page: #1d2024;
+    --sheet: #272b30;
+    --guide: rgba(255, 255, 255, 0.05);
+    --ink: #eeece5;
+    --soft: #aeaca3;
+    --block: #31353b;
+    --wash: #454a51;
+    --readonly-bg: #3a3e44;
+    --night: #14161a;
+    --night-wash: #2c3036;
+    --night-soft: #aeaca3;
+    --night-text: #eeece5;
+    --link: #8cbcf5;
+    --night-link: #8cbcf5;
+    --shadow: rgba(0, 0, 0, 0.5);
+    --new-bg: #123a63;
+    --new-shade: #1b4f83;
+    --new-ink: #cfe5fb;
+    --changed-bg: #56360c;
+    --changed-shade: #734a12;
+    --changed-ink: #fbe6c2;
+    --touched: #c3a6ff;
+    --selected: #ff8fb4;
+    --danger: #f09595;
+  }
+}

@@ -1,0 +1,396 @@
+{
+ "page": "Maschera di prova",
+ "source": "tests/fixtures/maschera.html",
+ "granularity": "blocchi",
+ "width": 1600,
+ "columns": 12,
+ "rowPx": 24,
+ "count": 18,
+ "truncated": false,
+ "overlays": [],
+ "blocks": [
+  {
+   "id": "header-1",
+   "tag": "header",
+   "label": "SISaR · Acquisti",
+   "selector": "header",
+   "x": 0,
+   "y": 0,
+   "w": 12,
+   "h": 2,
+   "status": "existing",
+   "type": "header",
+   "tone": "dark",
+   "parts": [
+    [
+     "text",
+     2,
+     33,
+     6,
+     35,
+     "SISaR · Acquisti"
+    ]
+   ]
+  },
+  {
+   "id": "nav-2",
+   "tag": "nav",
+   "label": "Percorso",
+   "selector": "nav",
+   "x": 0,
+   "y": 2,
+   "w": 12,
+   "h": 2,
+   "status": "existing",
+   "type": "breadcrumb",
+   "parts": [
+    [
+     "text",
+     4,
+     25,
+     1,
+     48,
+     "›"
+    ],
+    [
+     "text",
+     8,
+     25,
+     1,
+     48,
+     "›"
+    ],
+    [
+     "link",
+     2,
+     25,
+     2,
+     48,
+     "Home"
+    ],
+    [
+     "link",
+     5,
+     25,
+     3,
+     48,
+     "Acquisti"
+    ],
+    [
+     "text",
+     9,
+     25,
+     2,
+     48,
+     "Ordini"
+    ]
+   ]
+  },
+  {
+   "id": "h1-3",
+   "tag": "h1",
+   "label": "Ricerca ordini",
+   "selector": "main > h1",
+   "x": 0,
+   "y": 4,
+   "w": 12,
+   "h": 2,
+   "status": "existing",
+   "type": "heading"
+  },
+  {
+   "id": "div-4",
+   "tag": "div",
+   "label": "Filtri",
+   "selector": "main > div:nth-of-type(1)",
+   "x": 0,
+   "y": 6,
+   "w": 12,
+   "h": 2,
+   "status": "existing",
+   "type": "tabs",
+   "parts": [
+    [
+     "button",
+     0,
+     0,
+     4,
+     94,
+     "Filtri"
+    ],
+    [
+     "button",
+     4,
+     0,
+     5,
+     94,
+     "Risultati"
+    ],
+    [
+     "button",
+     10,
+     0,
+     5,
+     94,
+     "Allegati"
+    ]
+   ]
+  },
+  {
+   "id": "form-5",
+   "tag": "form",
+   "label": "Filtri di ricerca",
+   "selector": "main > form",
+   "x": 0,
+   "y": 8,
+   "w": 12,
+   "h": 12,
+   "status": "existing",
+   "type": "form",
+   "children": [
+    {
+     "id": "input-6",
+     "tag": "input",
+     "label": "Fornitore",
+     "selector": "#fornitore",
+     "x": 0,
+     "y": 1,
+     "w": 4,
+     "h": 2,
+     "status": "existing",
+     "type": "lookup",
+     "required": true
+    },
+    {
+     "id": "input-7",
+     "tag": "input",
+     "label": "Data dal",
+     "selector": "#dal",
+     "x": 4,
+     "y": 1,
+     "w": 4,
+     "h": 3,
+     "status": "existing",
+     "type": "input-date"
+    },
+    {
+     "id": "input-8",
+     "tag": "input",
+     "label": "Data al",
+     "selector": "#al",
+     "x": 8,
+     "y": 1,
+     "w": 4,
+     "h": 3,
+     "status": "existing",
+     "type": "input-date"
+    },
+    {
+     "id": "input-9",
+     "tag": "input",
+     "label": "Importo minimo",
+     "selector": "#importo",
+     "x": 0,
+     "y": 4,
+     "w": 4,
+     "h": 2,
+     "status": "existing",
+     "type": "input-number"
+    },
+    {
+     "id": "select-10",
+     "tag": "select",
+     "label": "Stato",
+     "selector": "#stato",
+     "x": 4,
+     "y": 4,
+     "w": 4,
+     "h": 2,
+     "status": "existing",
+     "type": "select"
+    },
+    {
+     "id": "input-11",
+     "tag": "input",
+     "label": "Email referente",
+     "selector": "#email",
+     "x": 8,
+     "y": 4,
+     "w": 4,
+     "h": 2,
+     "status": "existing",
+     "type": "input-email"
+    },
+    {
+     "id": "input-12",
+     "tag": "input",
+     "label": "Solo urgenti",
+     "selector": "#urgente",
+     "x": 0,
+     "y": 7,
+     "w": 1,
+     "h": 1,
+     "status": "existing",
+     "type": "checkbox"
+    },
+    {
+     "id": "div-13",
+     "tag": "div",
+     "label": "Beni",
+     "selector": "main > form > div:nth-of-type(8)",
+     "x": 4,
+     "y": 7,
+     "w": 4,
+     "h": 1,
+     "status": "existing",
+     "parts": [
+      [
+       "radio",
+       0,
+       0,
+       11,
+       100,
+       "Beni"
+      ],
+      [
+       "radio",
+       12,
+       0,
+       13,
+       100,
+       "Servizi"
+      ]
+     ]
+    },
+    {
+     "id": "input-14",
+     "tag": "input",
+     "label": "Inviati a NSO",
+     "selector": "#nso",
+     "x": 8,
+     "y": 7,
+     "w": 1,
+     "h": 1,
+     "status": "existing",
+     "type": "toggle"
+    },
+    {
+     "id": "textarea-15",
+     "tag": "textarea",
+     "label": "Note di ricerca",
+     "selector": "main > form > textarea",
+     "x": 0,
+     "y": 8,
+     "w": 12,
+     "h": 3,
+     "status": "existing",
+     "type": "textarea"
+    }
+   ]
+  },
+  {
+   "id": "div-16",
+   "tag": "div",
+   "label": "Azioni",
+   "selector": "main > div:nth-of-type(2)",
+   "x": 0,
+   "y": 20,
+   "w": 12,
+   "h": 2,
+   "status": "existing",
+   "type": "button-group",
+   "parts": [
+    [
+     "button",
+     0,
+     0,
+     5,
+     100,
+     "Cerca"
+    ],
+    [
+     "button",
+     5,
+     0,
+     5,
+     100,
+     "Pulisci"
+    ],
+    [
+     "button",
+     10,
+     0,
+     7,
+     100,
+     "Nuovo ordine"
+    ],
+    [
+     "button",
+     18,
+     0,
+     5,
+     100,
+     "Elimina"
+    ]
+   ]
+  },
+  {
+   "id": "table-17",
+   "tag": "table",
+   "label": "Risultati",
+   "selector": "main > table",
+   "x": 0,
+   "y": 22,
+   "w": 12,
+   "h": 5,
+   "status": "existing",
+   "type": "table"
+  },
+  {
+   "id": "nav-18",
+   "tag": "nav",
+   "label": "Pagine",
+   "selector": "main > nav",
+   "x": 0,
+   "y": 27,
+   "w": 12,
+   "h": 2,
+   "status": "existing",
+   "type": "pagination",
+   "parts": [
+    [
+     "icon-button",
+     92,
+     0,
+     2,
+     100,
+     "‹"
+    ],
+    [
+     "button",
+     94,
+     0,
+     2,
+     100,
+     "1"
+    ],
+    [
+     "button",
+     96,
+     0,
+     2,
+     100,
+     "2"
+    ],
+    [
+     "icon-button",
+     98,
+     0,
+     2,
+     100,
+     "›"
+    ]
+   ]
+  }
+ ]
+}
